@@ -1,0 +1,11 @@
+<module rename-to='FluidRTS'>
+  <inherits name='playn.PlayN'/>
+  <inherits name='FluidRTSAssets'/>
+
+  <source path='core'/>
+  <source path='html'/>
+
+  <public path="resources" />
+
+  <entry-point class='de.kjellski.games.fluidrts.html.FluidRTSHtml'/>
+</module>
