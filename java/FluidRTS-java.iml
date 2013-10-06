@@ -3,7 +3,6 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
-    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
@@ -11,8 +10,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="FluidRTS-core" />
+    <orderEntry type="library" name="Maven: com.googlecode.playn:playn-jbox2d:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jbox2d:jbox2d-library:2.2.1.1" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.playn:playn-core:1.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.samskivert:pythagoras:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: com.threerings:tripleplay:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: com.threerings:react:1.4" level="project" />
     <orderEntry type="module" module-name="FluidRTS-assets" />
     <orderEntry type="library" name="Maven: com.googlecode.playn:playn-java:1.7.2" level="project" />
     <orderEntry type="library" name="Maven: org.lwjgl.lwjgl:lwjgl:2.9.0" level="project" />
