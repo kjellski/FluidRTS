@@ -3,9 +3,10 @@ package de.kjellski.games.fluidrts.core.tileutil;
 import playn.core.Json;
 
 import java.util.List;
+import static playn.core.PlayN.log;
 
 public class TileLayer {
-    public Json.Array data = null;
+    public int[] data = null;
     public int height = 20;
     public String name = null;
     public float opacity = 1;
@@ -37,10 +38,18 @@ public class TileLayer {
                 '}';
     }
 
-    public TileLayer(Json.Object object, List<TileSet> tileset) {
-        this.tileset = tileset;
+    public TileLayer(Json.Object object, final List<TileSet> tileset) {
+        if (tileset == null)
+            throw new NullPointerException("tileset was null");
 
-        data = object.getArray("data");
+        log().debug("tileset: " + tileset.toString());
+        this.tileset = tileset;
+        log().debug("this.tileset: " + this.tileset.toString());
+        Json.TypedArray<Integer> arr = object.getArray("data", Integer.class);
+        this.data = new int[arr.length()];
+        for(int i = 0; i < arr.length(); i++)
+            this.data[i] = arr.get(i);
+
         height = object.getInt("height");
         name = object.getString("name");
         opacity = object.getNumber("opacity");
@@ -52,14 +61,15 @@ public class TileLayer {
     }
 
     public Tile getTile(int x, int y) {
-        Integer pos = x + y * width;
-        TileSet tilesTileSet;
+        log().debug("getTile(" + x + ", " + y + ") in tileset:" + tileset.toString());
+        Integer pos = x + y * width + 1;
         for (TileSet set : tileset) {
             if (set.contains(pos)) {
-                tilesTileSet = set;
+                return new Tile(set, x, y);
             }
         }
 
-        return new Tile(tilesTileSet, tilesTileSet.tileproperties.get(pos.toString()), , x, y);
+        throw new RuntimeException("unable to find tileset for tile at position " +
+                pos + " for coordinates (" + x + "," + y + ")");
     }
 }

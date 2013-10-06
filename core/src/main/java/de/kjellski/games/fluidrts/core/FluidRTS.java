@@ -1,15 +1,14 @@
 package de.kjellski.games.fluidrts.core;
 
-import static playn.core.PlayN.*;
-
-import de.kjellski.games.fluidrts.core.entities.GrassEntity;
 import playn.core.*;
 import playn.core.util.Callback;
+
+import static playn.core.PlayN.*;
 
 public class FluidRTS extends Game.Default {
 
     // scale difference between screen space (pixels) and world space (physics).
-    //public static final float physUnitPerScreenUnit = 1f / 32f;
+    public static final float physUnitPerScreenUnit = 1 / 20f;
     public static final float GRAVITY_X = 0.0f;
     public static final float GRAVITY_Y = 0.0f;
 
@@ -35,7 +34,7 @@ public class FluidRTS extends Game.Default {
 
         // create our world layer (scaled to "world space")
         worldLayer = graphics().createGroupLayer();
-//        worldLayer.setScale(1f / physUnitPerScreenUnit);
+        worldLayer.setScale(1f / physUnitPerScreenUnit);
         graphics().rootLayer().add(worldLayer);
 
         FluidWorldLoader.CreateWorld("levels/level002.json", worldLayer, new Callback<FluidLevel>() {
@@ -56,12 +55,15 @@ public class FluidRTS extends Game.Default {
             @Override
             public void onPointerStart(Pointer.Event event) {
                 if (worldLoaded) {
-                    GrassEntity grassEntity = new GrassEntity(world,
-                            //physUnitPerScreenUnit * event.x(),
-                            event.x(),
-                            //physUnitPerScreenUnit * event.y()
-                            event.y());
-                    world.add(grassEntity);
+//                    GrassEntity grassEntity = new GrassEntity(world,
+//                            physUnitPerScreenUnit * event.x(),
+//                            event.x(),
+//                            physUnitPerScreenUnit * event.y()
+//                            event.y());
+//                    world.add(grassEntity);
+                    log().info("onPointerStart(" + event.x() + ", " + event.y() + ")");
+                    log().info("onPointerStart(" + physUnitPerScreenUnit * event.x() + ", "
+                            + physUnitPerScreenUnit * event.y() + ")");
                 }
             }
         });

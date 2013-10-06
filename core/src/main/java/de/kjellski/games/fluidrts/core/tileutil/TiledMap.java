@@ -1,8 +1,8 @@
 package de.kjellski.games.fluidrts.core.tileutil;
 
-import de.kjellski.games.fluidrts.core.entities.Entity;
 import playn.core.GroupLayer;
 import playn.core.Json;
+import playn.core.PlayN;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,6 @@ import java.util.Properties;
  * Abstraction of the mapeditor.org generated .json files
  */
 public class TiledMap {
-    public GroupLayer BaseGroupLayer;
-
     // -----------------------------------------------------------------------------
     // Properties the .json has
     // -----------------------------------------------------------------------------
@@ -31,8 +29,7 @@ public class TiledMap {
     @Override
     public String toString() {
         return "TiledMap{" +
-                "BaseGroupLayer=" + BaseGroupLayer +
-                ", height=" + height +
+                " height=" + height +
                 ", layers=" + layers +
                 ", orientation=" + orientation +
                 ", properties=" + properties +
@@ -52,23 +49,31 @@ public class TiledMap {
     }
 
     private void parse(Json.Object object) {
+        //log().debug("TiledMap(" + object.toString() + ")");
         height = object.getInt("height");
-        layers = parseLayers(object.getArray("layers"));
+        tilesets = parseTilesets(object.getArray("tilesets", Json.Object.class));
         orientation = Enum.valueOf(TiledMapOrientation.class, object.getString("orientation"));
         properties = parseProperties(object.getObject("properties"));
         tileheight = object.getInt("tileheight");
-        tilesets = parseTilesets(object.getArray("tilesets"));
         tilewidth = object.getInt("tilewidth");
         version = object.getInt("version");
         width = object.getInt("width");
+
+        // this accesses tilesets, needs to be done last
+        layers = parseLayers(object.getArray("layers"), tilesets);
     }
 
-    private List<TileSet> parseTilesets(Json.Array tilesets) {
+    private List<TileSet> parseTilesets(Json.TypedArray<Json.Object> objectTypedArray) {
+        if(objectTypedArray == null)
+            throw new NullPointerException("objectTypedArray was null");
+
+
         List<TileSet> result = new ArrayList<TileSet>();
-
-        for (int i = 0; i < tilesets.length(); i++)
-            result.add(new TileSet(tilesets.getObject(i)));
-
+        for (int i = 0; i < objectTypedArray.length(); i++) {
+            Json.Object tmp = objectTypedArray.get(i);
+//            log().info(i + ": "+ tmp.toString());
+            result.add(new TileSet(tmp));
+        }
         return result;
     }
 
@@ -83,11 +88,31 @@ public class TiledMap {
         return result;
     }
 
-    private List<TileLayer> parseLayers(Json.Array jsonLayers) {
+    private List<TileLayer> parseLayers(Json.Array jsonLayers, List<TileSet> tilesets) {
         List<TileLayer> result = new ArrayList<TileLayer>();
 
-        for (int i = 0; i < jsonLayers.length(); i++)
+        for (int i = 0; i < jsonLayers.length(); i++){
+//            log().info(tilesets.toString());
             result.add(new TileLayer(jsonLayers.getObject(i), tilesets));
+        }
+
+        return result;
+    }
+
+    public GroupLayer getBaseGroupLayer() {
+        GroupLayer result = PlayN.graphics().createGroupLayer();
+
+        for (TileLayer layer : layers)
+        {
+            for (int x = 0; x < layer.width; x++)
+            {
+                for (int y = 0; y < layer.height; y++)
+                {
+                    Tile tmptile = layer.getTile(x,y);
+                    result.add(PlayN.graphics().createImageLayer(tmptile.image));
+                }
+            }
+        }
 
         return result;
     }

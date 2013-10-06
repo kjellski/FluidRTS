@@ -1,12 +1,16 @@
 package de.kjellski.games.fluidrts.core.tileutil;
 
+import playn.core.Image;
 import playn.core.Json;
 
 import java.util.Properties;
 
+import static playn.core.PlayN.assets;
+import static playn.core.PlayN.log;
+
 public class TileSet {
     public int firstgid;
-    public String image;
+    public String imagepath;
     public int imageheight;
     public int imagewidth;
     public int margin;
@@ -17,12 +21,16 @@ public class TileSet {
     public Properties tileproperties;
     public int tilewidth;
 
+    Image image;
+
     private TileSet() {
     }
 
     public TileSet(Json.Object object) {
         firstgid = object.getInt("firstgid");
-        image = object.getString("image");
+        imagepath = object.getString("image").replaceAll("\\.\\./", "");
+        //log().info("imagepath: " + imagepath);
+        image = assets().getImage(imagepath);
         imageheight = object.getInt("imageheight");
         imagewidth = object.getInt("imagewidth");
         margin = object.getInt("margin");
@@ -30,14 +38,25 @@ public class TileSet {
         properties = parseProperties(object.getObject("properties"));
         spacing = object.getInt("spacing");
         tileheight = object.getInt("tileheight");
-        tileproperties = parseProperties(object.getObject("tileproperties"));
+
+        Json.Object tmp = object.getObject("tileproperties");
+        if (tmp != null) {
+            // This can be null if noone assigned any properties for this tilesets tileproperties
+            //log().info(object.toString());
+            tileproperties = parseTileProperties(tmp);
+        }
+
         tilewidth = object.getInt("tilewidth");
     }
 
-    public boolean contains(int tileid)
-    {
-        return (imageheight / tileheight) * (imageheight / tileheight) <= tileid
-                && firstgid >= tileid;
+    public boolean contains(int pos) {
+        int upper = (imageheight / tileheight) * (imageheight / tileheight);
+        int lower = firstgid;
+        return  pos <= upper && pos >= lower;
+    }
+
+    public Image.Region getRegion(int x, int y) {
+        return this.image.subImage(x, y, tilewidth, tileheight);
     }
 
     @Override
@@ -57,13 +76,36 @@ public class TileSet {
     }
 
     private Properties parseProperties(Json.Object object) {
-        Properties result = new Properties();
+        if (object == null)
+            throw new NullPointerException("object was null");
 
-        Json.TypedArray<String> jsonProperties = object.keys();
-        for (int i = 0; i < jsonProperties.length(); i++) {
-            String key = jsonProperties.get(i);
+        Properties result = new Properties();
+        log().info(object.toString());
+
+        Json.TypedArray<String> keys = object.keys();
+        for (int i = 0; i < keys.length(); i++) {
+            String key = keys.get(i);
+//            log().info(key);
             result.put(key, object.getString(key));
         }
+        return result;
+    }
+
+    public Properties parseTileProperties(Json.Object object) {
+        if (object == null)
+            throw new NullPointerException("object was null");
+        Properties result = new Properties();
+
+        log().info("parseTileProperties");
+        log().info(object.toString());
+
+        Json.TypedArray<String> keys = object.keys();
+        for (int i = 0; i < keys.length(); i++) {
+            String key = keys.get(i);
+            log().info(key);
+            result.put(key, parseProperties(object.getObject(key)));
+        }
+
         return result;
     }
 }

@@ -4,17 +4,18 @@ import playn.core.Image;
 
 import java.util.Properties;
 
-public final class Tile {
-    public final  Properties properties;
-    public final TileSet tileset;
-    public final Image image;
-    public final int x,y;
+import static playn.core.PlayN.assets;
 
-    public Tile(TileSet tileset, Properties properties, Image image, int x, int y) {
-        this.properties = properties;
+public final class Tile {
+    //    public final  Properties properties;
+    public final TileSet tileset;
+    public final Image.Region image;
+    public final int x, y;
+
+    public Tile(TileSet tileset, int x, int y) {
         this.tileset = tileset;
-        this.image = image;
         this.x = x;
         this.y = y;
+        this.image = tileset.getRegion(x, y);
     }
 }
