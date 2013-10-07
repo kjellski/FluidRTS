@@ -64,7 +64,7 @@ public class TiledMap {
     }
 
     private List<TileSet> parseTilesets(Json.TypedArray<Json.Object> objectTypedArray) {
-        if(objectTypedArray == null)
+        if (objectTypedArray == null)
             throw new NullPointerException("objectTypedArray was null");
 
 
@@ -91,7 +91,7 @@ public class TiledMap {
     private List<TileLayer> parseLayers(Json.Array jsonLayers, List<TileSet> tilesets) {
         List<TileLayer> result = new ArrayList<TileLayer>();
 
-        for (int i = 0; i < jsonLayers.length(); i++){
+        for (int i = 0; i < jsonLayers.length(); i++) {
 //            log().info(tilesets.toString());
             result.add(new TileLayer(jsonLayers.getObject(i), tilesets));
         }
@@ -102,13 +102,10 @@ public class TiledMap {
     public GroupLayer getBaseGroupLayer() {
         GroupLayer result = PlayN.graphics().createGroupLayer();
 
-        for (TileLayer layer : layers)
-        {
-            for (int x = 0; x < layer.width; x++)
-            {
-                for (int y = 0; y < layer.height; y++)
-                {
-                    Tile tmptile = layer.getTile(x,y);
+        for (TileLayer layer : layers) {
+            for (int y = 0; y < layer.height; y++) {
+                for (int x = 0; x < layer.width; x++) {
+                    Tile tmptile = layer.getTile(x, y);
                     result.add(PlayN.graphics().createImageLayer(tmptile.image));
                 }
             }

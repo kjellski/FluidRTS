@@ -61,15 +61,28 @@ public class TileLayer {
     }
 
     public Tile getTile(int x, int y) {
-        log().debug("getTile(" + x + ", " + y + ") in tileset:" + tileset.toString());
-        Integer pos = x + y * width + 1;
+        Integer tileDataPos = x + y * width;
+        int tileId = data[tileDataPos];
+        log().info("getTile(" + x + ", " + y + ") => " + tileDataPos + " => " + tileId);
+        Tile tmp = null;
+
+        if (tileId == 0)
+        {
+            String log = "The map contains an undifined tile at position(" + x + ", " + y + "), which is illegal.";
+            log().error(log);
+            throw new RuntimeException(log);
+        }
+
         for (TileSet set : tileset) {
-            if (set.contains(pos)) {
-                return new Tile(set, x, y);
+            if (set.contains(tileId)) {
+                tmp = new Tile(set, tileId, x, y);
             }
         }
 
-        throw new RuntimeException("unable to find tileset for tile at position " +
-                pos + " for coordinates (" + x + "," + y + ")");
+        if (tmp == null)
+            throw new RuntimeException("unable to find tileset for tile at position " +
+                    tileId + " for coordinates (" + x + "," + y + ")");
+
+        return tmp;
     }
 }

@@ -52,11 +52,7 @@ public class TileSet {
     public boolean contains(int pos) {
         int upper = (imageheight / tileheight) * (imageheight / tileheight);
         int lower = firstgid;
-        return  pos <= upper && pos >= lower;
-    }
-
-    public Image.Region getRegion(int x, int y) {
-        return this.image.subImage(x, y, tilewidth, tileheight);
+        return pos <= upper && pos >= lower;
     }
 
     @Override
@@ -107,5 +103,16 @@ public class TileSet {
         }
 
         return result;
+    }
+
+    private Image.Region getRegion(int x, int y) {
+        return this.image.subImage((x - 1) * tilewidth, (y - 1) * tileheight, tilewidth, tileheight);
+    }
+
+    public Image.Region getTilesImage(int tileId) {
+        int x = (tileId / tileheight);
+        int y = tileId  % tilewidth;
+        log().info("getTilesImage(" + tileId + ") => " + x + ", " + y);
+        return getRegion(x, y);
     }
 }

@@ -8,7 +8,7 @@ import static playn.core.PlayN.*;
 public class FluidRTS extends Game.Default {
 
     // scale difference between screen space (pixels) and world space (physics).
-    public static final float physUnitPerScreenUnit = 1 / 20f;
+    public static final float physUnitPerScreenUnit = 1 / 10f;
     public static final float GRAVITY_X = 0.0f;
     public static final float GRAVITY_Y = 0.0f;
 
