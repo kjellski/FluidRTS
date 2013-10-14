@@ -16,6 +16,7 @@ public final class Tile {
         this.y = y;
         this.image = tileset.getTilesImage(tileId);
 
-        log().debug("Tile(set=" + tileset.firstgid + ", x=" + x + ", y=" + y + ")");
+        log().debug("Tile(set=" + tileset.firstgid + ", x=" + x + ", y=" + y + ", " +
+                "image={" + this.image.x() + ", "+ this.image.y() + "})");
     }
 }

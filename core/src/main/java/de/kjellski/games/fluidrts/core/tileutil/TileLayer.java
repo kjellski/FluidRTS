@@ -63,7 +63,7 @@ public class TileLayer {
     public Tile getTile(int x, int y) {
         Integer tileDataPos = x + y * width;
         int tileId = data[tileDataPos];
-        log().info("getTile(" + x + ", " + y + ") => " + tileDataPos + " => " + tileId);
+//        log().info("getTile(" + x + ", " + y + ") => " + tileDataPos + " => " + tileId);
         Tile tmp = null;
 
         if (tileId == 0)

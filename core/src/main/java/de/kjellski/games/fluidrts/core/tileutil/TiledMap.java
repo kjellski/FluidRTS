@@ -1,6 +1,7 @@
 package de.kjellski.games.fluidrts.core.tileutil;
 
 import playn.core.GroupLayer;
+import playn.core.ImageLayer;
 import playn.core.Json;
 import playn.core.PlayN;
 
@@ -106,7 +107,12 @@ public class TiledMap {
             for (int y = 0; y < layer.height; y++) {
                 for (int x = 0; x < layer.width; x++) {
                     Tile tmptile = layer.getTile(x, y);
-                    result.add(PlayN.graphics().createImageLayer(tmptile.image));
+                    ImageLayer tmpImageLayer =PlayN.graphics().createImageLayer(tmptile.image);
+                    // go on here: the images are correctly retrieved from the map, but not correctly drawn.
+                    // we now need to position them inside the areay we're ale to look at on the map.
+                    // translation doesn't work on these coordinates, try multiplying them by physXUnit shit
+                    tmpImageLayer.setTranslation(x,y);
+                    result.add(tmpImageLayer);
                 }
             }
         }

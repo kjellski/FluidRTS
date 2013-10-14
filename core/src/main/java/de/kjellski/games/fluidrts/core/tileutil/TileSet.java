@@ -92,13 +92,13 @@ public class TileSet {
             throw new NullPointerException("object was null");
         Properties result = new Properties();
 
-        log().info("parseTileProperties");
-        log().info(object.toString());
+//        log().info("parseTileProperties");
+//        log().info(object.toString());
 
         Json.TypedArray<String> keys = object.keys();
         for (int i = 0; i < keys.length(); i++) {
             String key = keys.get(i);
-            log().info(key);
+//            log().info(key);
             result.put(key, parseProperties(object.getObject(key)));
         }
 
@@ -106,13 +106,14 @@ public class TileSet {
     }
 
     private Image.Region getRegion(int x, int y) {
-        return this.image.subImage((x - 1) * tilewidth, (y - 1) * tileheight, tilewidth, tileheight);
+        return this.image.subImage(x * tilewidth, y * tileheight, tilewidth, tileheight);
     }
 
     public Image.Region getTilesImage(int tileId) {
-        int x = (tileId / tileheight);
-        int y = tileId  % tilewidth;
-        log().info("getTilesImage(" + tileId + ") => " + x + ", " + y);
+        tileId -= 1;
+        int x = (tileId % tilewidth);
+        int y = (int) Math.floor(tileId / tilewidth);
+        log().info("getTilesImage(" + tileId + ") => (" + x + ", " + y + ")");
         return getRegion(x, y);
     }
 }
