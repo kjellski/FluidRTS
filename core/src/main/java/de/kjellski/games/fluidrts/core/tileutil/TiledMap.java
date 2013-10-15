@@ -111,7 +111,7 @@ public class TiledMap {
                     // go on here: the images are correctly retrieved from the map, but not correctly drawn.
                     // we now need to position them inside the areay we're ale to look at on the map.
                     // translation doesn't work on these coordinates, try multiplying them by physXUnit shit
-                    tmpImageLayer.setTranslation(x,y);
+                    tmpImageLayer.setTranslation(x * tilewidth ,y * tileheight).transform();
                     result.add(tmpImageLayer);
                 }
             }
